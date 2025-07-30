@@ -2,6 +2,10 @@
 
 Hands-Off is a lightweight, privacy-focused voice assistant for desktop systems. It listens for a custom wake word and then records and transcribes your spoken command using Whisper, either locally with `faster-whisper` or via the OpenAI API. Built in Python, it offers a modular and extensible foundation for creating voice-controlled desktop tools.
 
+## Demo
+
+https://youtu.be/mPXLuGkYVnY
+
 ## Features
 
 - Wake word detection using Picovoice Porcupine
