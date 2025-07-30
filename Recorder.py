@@ -12,7 +12,7 @@ class Record:
         model_size = "medium.en"
         self.model = WhisperModel(model_size, device="cuda", compute_type="float16")
 
-    def record_chunk(self, p, stream, file_path, chunk_length=2):
+    def record_chunk(self, p, stream, file_path, chunk_length=1.5):
         frames = []
         for _ in range(0, int(16000/1024 * chunk_length)):
             data = stream.read(1024)
@@ -38,8 +38,6 @@ class Record:
         p = pyaudio.PyAudio()
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
 
-        accumulated_transcription = ""
-
         try:    
             print("recording")
             chunk_file = "temp_chunk.wav"
@@ -49,11 +47,8 @@ class Record:
             os.remove(chunk_file)
         except KeyboardInterrupt:
             print("stopping")
-
-            with open("log.txt", "w") as log_file:
-                log_file.write(transcription)
         finally:
-            print("LOG: " + transcription)
             stream.stop_stream()
             stream.close()
             p.terminate()
+            return transcription
