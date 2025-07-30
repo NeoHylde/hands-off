@@ -44,12 +44,17 @@ hands-off/
 1. Clone repo.
 2. Download requirements.
 3. Create .env with these:
+   
     ACCESS_KEY=your_porcupine_key
+   
     SPOTIPY_CLIENT_ID=your_spotify_client_id
+   
     SPOTIPY_CLIENT_SECRET=your_spotify_client_secret
+   
     SPOTIPY_REDIRECT_URI=http://localhost:8888/callback
-4. Make sure .ppn file is in base directory.
-5. Run with python main.py.
+   
+5. Make sure .ppn file is in base directory.
+6. Run with python main.py.
 
 ## Remarks
 Ensure you have an active Spotify device running to use playback controls
