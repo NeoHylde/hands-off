@@ -21,15 +21,23 @@ https://youtu.be/mPXLuGkYVnY
 ## Project Structure
 
 hands-off/
-├── main.py                  # Entry point for the application
-├── WakeWord.py             # Handles wake word detection and command routing
-├── Recorder.py             # Records and transcribes audio using faster-whisper
-├── Whisper.py              # Records and transcribes audio using OpenAI Whisper API
-├── Music.py                # Integrates Spotify playback via Spotipy
-├── requirements.txt        # Python dependencies
-├── Hands-Off_en_windows_v3_0_0.ppn  # Wake word model file
-├── .env                    # API keys and credentials
-└── README.md               # Project documentation
+  ├── main.py                  # Entry point for the application
+  
+  ├── WakeWord.py             # Handles wake word detection and command routing
+  
+  ├── Recorder.py             # Records and transcribes audio using faster-whisper
+  
+  ├── Whisper.py              # Records and transcribes audio using OpenAI Whisper API
+  
+  ├── Music.py                # Integrates Spotify playback via Spotipy
+  
+  ├── requirements.txt        # Python dependencies
+  
+  ├── Hands-Off_en_windows_v3_0_0.ppn  # Wake word model file
+  
+  ├── .env                    # API keys and credentials
+  
+  └── README.md               # Project documentation
 
 ## Setup
 
