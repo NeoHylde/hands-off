@@ -8,6 +8,7 @@ import sys
 from dotenv import load_dotenv
 from Recorder import Record
 from Music import Music
+from playsound import playsound
 
 class Wake:
     def __init__(self):
