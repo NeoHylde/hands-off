@@ -1,4 +1,4 @@
-from WakeWord import Wake
+from WakeWord import WakeWorker
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -63,12 +63,26 @@ class UserInterface(QMainWindow):
                 widget.setParent(None)
                 widget.deleteLater()
 
-            self.wake = Wake()
             self.btn_activate.setEnabled(True)
-            self.btn_activate.clicked.connect(self.wake.start)
+            self.btn_activate.clicked.connect(self.start_wake)
     
     def start_wake(self):
-        pass
+        self.thread = QThread()
+        self.worker = WakeWorker()
+        self.worker.moveToThread(self.thread)
+
+        self.thread.started.connect(self.worker.start)
+        self.worker.finished.connect(self.handle_result)
+        self.worker.error.connect(self.handle_error)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+
+        self.thread.start()
+
+        self.btn_activate.setText("End Silent Listener")
+        self.btn_activate.clicked.connect(self.closeEvent)
+
         
     def __init__(self):
         super().__init__(None)
@@ -90,11 +104,23 @@ class UserInterface(QMainWindow):
         if credentials_missing:
             self.setUp()
         else: 
-            self.wake = Wake()
             self.btn_activate.setEnabled(True)
-            self.btn_activate.clicked.connect(self.wake.start)
+            self.btn_activate.clicked.connect(self.start_wake)
 
         self.setCentralWidget(frame)
+    
+    def handle_result(self):
+        print("WakeWorker finished successfully.")
+
+    def handle_error(self, error_message):
+        print(f"WakeWorker encountered an error: {error_message}")
+
+    def closeEvent(self, event):
+        if hasattr(self, 'thread'):
+            self.worker.recorder.stop()
+            self.thread.quit()
+            self.thread.wait()
+        event.accept()
 
 if __name__ == "__main__":
     import sys

@@ -8,10 +8,15 @@ import sys
 from dotenv import load_dotenv
 from Recorder import Record
 from Music import Music
-from playsound import playsound
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
-class Wake:
+class WakeWorker(QObject):
+    finished = pyqtSignal()
+    progress = pyqtSignal(int)
+    error = pyqtSignal(str)
+
     def __init__(self):
+        super().__init__()
         load_dotenv()
         self.porcupine = pvporcupine.create(
             access_key=os.getenv("ACCESS_KEY"),
@@ -44,20 +49,24 @@ class Wake:
 
 
     def start(self):
-        print("listening for wake word")
-
         try:
-            self.recorder.start()
-            while True:
-                frame = self.recorder.read()
-                keyword_index = self.porcupine.process(frame)
-                if keyword_index >= 0:
-                    print("wake word detected")
-                    transcript = self.whisper.start()
-                    self.parse_command(transcription=transcript)
-        except KeyboardInterrupt:
-            print("stopping")
-        finally:
-            self.recorder.stop()
-            self.recorder.delete()
-            self.porcupine.delete()
+            print("listening for wake word")
+
+            try:
+                self.recorder.start()
+                while True:
+                    frame = self.recorder.read()
+                    keyword_index = self.porcupine.process(frame)
+                    if keyword_index >= 0:
+                        print("wake word detected")
+                        transcript = self.whisper.start()
+                        self.parse_command(transcription=transcript)
+            except KeyboardInterrupt:
+                print("stopping")
+            finally:
+                self.recorder.stop()
+                self.recorder.delete()
+                self.porcupine.delete()
+                self.finished.emit()
+        except Exception as e:
+            self.error.emit(str(e))
