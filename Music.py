@@ -31,8 +31,6 @@ class Music:
 
         self.device_id = devices['devices'][0]['id']
 
-    
-
     def play_track(self, track_name):
         results = self.sp.search(q=track_name, type="track", limit=1)
         if not results['tracks']['items']:
