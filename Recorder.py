@@ -10,7 +10,11 @@ class Record:
 
     def __init__(self):
         model_size = "medium.en"
-        self.model = WhisperModel(model_size, device="cuda", compute_type="float16")
+        device = os.getenv("WHISPER_DEVICE", "cpu")
+        compute_type = "int8" if device == "cpu" else "float16"
+        self.model = WhisperModel(model_size, device=device, compute_type=compute_type)
+        print("Using model: ", model_size)
+        print("Using device: ", device)
 
     def record_chunk(self, p, stream, file_path, chunk_length=1.5):
         frames = []
