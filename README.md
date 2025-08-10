@@ -63,3 +63,8 @@ Only one transcription method is active at a time, depending on which Record cla
 
 The assistant recognizes commands like "play [song]", "pause", "continue", "next", and "skip forward". 
 The "next" command is still wip as of 30.07.25
+
+Recorder.py utilizes your machines nvidia GPU through CUDA/cuDNN, for better text parsing, detection, nuances, etc.
+If your machine doesn't have a GPU, here is an alternative (performs significantly worse since it relies on CPU):
+change line 13 to:  self.model = WhisperModel(model_size, device="cpu", compute_type="int8")
+
